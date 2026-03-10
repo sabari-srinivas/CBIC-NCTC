@@ -48,6 +48,19 @@ const Prompts = () => {
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
   const [copied, setCopied] = useState(false);
+  const img1Ref = useRef<HTMLDivElement>(null);
+  const img2Ref = useRef<HTMLDivElement>(null);
+  const [fs1, setFs1] = useState(false);
+  const [fs2, setFs2] = useState(false);
+
+  const toggleFullscreen = (ref: React.RefObject<HTMLDivElement>, setFs: (v: boolean) => void) => {
+    if (!ref.current) return;
+    if (document.fullscreenElement) {
+      document.exitFullscreen().then(() => setFs(false));
+    } else {
+      ref.current.requestFullscreen().then(() => setFs(true));
+    }
+  };
 
   const handleCopy = async (text: string) => {
     await navigator.clipboard.writeText(text);
