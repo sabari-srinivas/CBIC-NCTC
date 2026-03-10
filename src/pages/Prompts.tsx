@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Copy, Check, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, Copy, Check, ChevronLeft, ChevronRight, Maximize, Minimize } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import doubleDiamondGeneral from "@/assets/double_diamond_general.jpg";
 import DoubleDiamondAI from "@/components/DoubleDiamondAI";
