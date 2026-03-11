@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Maximize, X } from "lucide-react";
+import { ArrowLeft, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const challengeImages = [
@@ -16,7 +16,15 @@ const challengeImages = [
 
 const ChallengeCards = () => {
   const navigate = useNavigate();
-  const [fullscreenImg, setFullscreenImg] = useState<string | null>(null);
+  const [selectedImg, setSelectedImg] = useState<string | null>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelectedImg(null);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   return (
     <div className="h-screen bg-background flex flex-col overflow-hidden">
@@ -32,59 +40,40 @@ const ChallengeCards = () => {
         </div>
       </header>
 
-      {/* Cards grid – full width, full height */}
-      <div className="flex-1 min-h-0 overflow-y-auto p-3">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 h-full">
+      {/* Cards grid – clickable titles only */}
+      <div className="flex-1 min-h-0 flex items-center justify-center p-4">
+        <div className="w-full max-w-[1600px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {challengeImages.map((challenge, index) => (
-            <div
+            <button
               key={index}
-              className="relative rounded-lg border border-border overflow-hidden bg-card flex flex-col"
+              onClick={() => setSelectedImg(challenge.src)}
+              className="rounded-xl border border-border bg-card p-6 text-left transition-all hover:shadow-lg hover:border-primary/30 hover:-translate-y-1"
             >
-              {/* Title above image */}
-              <div className="px-3 py-2.5 border-b border-border shrink-0">
-                <p className="text-sm font-bold text-primary uppercase tracking-wide">
-                  {challenge.number}
-                </p>
-                <p className="text-base font-semibold text-card-foreground font-display leading-snug mt-0.5 line-clamp-2">
-                  {challenge.name}
-                </p>
-              </div>
-
-              {/* Image – zoomed out to show full content */}
-              <div className="flex-1 min-h-0 overflow-hidden bg-white">
-                <img
-                  src={challenge.src}
-                  alt={`${challenge.number}: ${challenge.name}`}
-                  className="w-full h-full object-contain"
-                />
-              </div>
-
-              {/* Fullscreen button – always visible */}
-              <button
-                onClick={() => setFullscreenImg(challenge.src)}
-                className="absolute top-2 right-2 h-7 w-7 rounded-md bg-black/60 hover:bg-black/80 text-white flex items-center justify-center transition-colors z-10"
-              >
-                <Maximize className="h-3.5 w-3.5" />
-              </button>
-            </div>
+              <p className="text-sm font-bold text-primary uppercase tracking-wide">
+                {challenge.number}
+              </p>
+              <p className="text-base font-semibold text-card-foreground font-display leading-snug mt-1.5">
+                {challenge.name}
+              </p>
+            </button>
           ))}
         </div>
       </div>
 
-      {/* Fullscreen overlay */}
-      {fullscreenImg && (
+      {/* Image overlay */}
+      {selectedImg && (
         <div
           className="fixed inset-0 z-50 bg-black flex items-center justify-center"
-          onClick={() => setFullscreenImg(null)}
+          onClick={() => setSelectedImg(null)}
         >
           <img
-            src={fullscreenImg}
-            alt="Challenge fullscreen"
+            src={selectedImg}
+            alt="Challenge card"
             className="max-w-[75vw] max-h-[75vh] object-contain"
             onClick={(e) => e.stopPropagation()}
           />
           <button
-            onClick={() => setFullscreenImg(null)}
+            onClick={() => setSelectedImg(null)}
             className="absolute top-4 right-4 h-10 w-10 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center transition-colors"
           >
             <X className="h-5 w-5" />

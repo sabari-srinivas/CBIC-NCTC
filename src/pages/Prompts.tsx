@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Copy, Check, Maximize, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -47,6 +47,14 @@ const Prompts = () => {
   const navigate = useNavigate();
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const [showFullscreen, setShowFullscreen] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setShowFullscreen(false);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   const handleCopy = useCallback(async (text: string, index: number) => {
     await navigator.clipboard.writeText(text);
