@@ -4,21 +4,21 @@ import { FileText, MessageSquare, Images, ArrowRight } from "lucide-react";
 const sections = [
   {
     title: "Challenge Cards",
-    description: "Explore the 8 challenge cards for the immersion session. View high-quality images with fullscreen support.",
+    description: "Explore the 13 challenge cards for the immersion session. View high-quality images with fullscreen support.",
     icon: Images,
     path: "/challenge-cards",
     gradient: "from-primary to-accent",
   },
   {
     title: "Deep Research Reports",
-    description: "View the NZ Sports AI consolidated research report in an interactive book format. Download or share with AI assistants.",
+    description: "View the CBIC / NCTC Stakeholder Visit Research Brief in an interactive book format. Download or share with AI assistants.",
     icon: FileText,
     path: "/deep-research",
     gradient: "from-accent to-primary",
   },
   {
     title: "Prompts",
-    description: "Double Diamond framework prompts for AI-powered coaching. Copy and use with your favourite AI tool.",
+    description: "Double Diamond framework prompts for the AI immersion session. Copy and use with your favourite AI tool.",
     icon: MessageSquare,
     path: "/prompts",
     gradient: "from-primary to-accent",
@@ -33,13 +33,13 @@ const Index = () => {
       <div className="max-w-6xl w-full animate-fade-in">
         <div className="text-center mb-12">
           <p className="text-sm font-medium tracking-widest uppercase text-muted-foreground mb-3">
-            NZ Sport Leaders Delegation &bull; India 2026
+            CBIC / NCTC Stakeholder Visit &bull; Rapid Build Immersion
           </p>
           <h1 className="text-4xl md:text-5xl font-bold font-display text-foreground mb-4">
             AI Coaching Toolkit
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Resources for the rapid build immersion session — research, frameworks, and prompts to accelerate AI adoption in NZ sport.
+            Resources for the rapid build immersion session — research, challenge cards, and prompts for integrated customs risk intelligence and AI.
           </p>
         </div>
 

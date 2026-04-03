@@ -13,8 +13,8 @@ const DeepResearch = () => {
 
   const handleDownload = () => {
     const link = document.createElement("a");
-    link.href = "/documents/NZ_Sports_AI_Report.pdf";
-    link.download = "NZ_Sports_AI_Consolidated_Report.pdf";
+    link.href = "/documents/CBIC _ NCTC Stakeholder Visit Research Brief.pdf";
+    link.download = "CBIC_NCTC_Stakeholder_Visit_Research_Brief.pdf";
     link.click();
   };
 
@@ -48,9 +48,9 @@ const DeepResearch = () => {
       <div className="flex-1 p-4">
         <div className="max-w-5xl mx-auto h-[calc(100vh-100px)] bg-card rounded-xl border border-border shadow-sm overflow-hidden">
           <iframe
-            src="/documents/NZ_Sports_AI_Report.pdf"
+            src="/documents/CBIC _ NCTC Stakeholder Visit Research Brief.pdf"
             className="w-full h-full"
-            title="NZ Sports AI Report"
+            title="CBIC / NCTC Stakeholder Visit Research Brief"
           />
         </div>
       </div>

@@ -1,22 +1,50 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, X } from "lucide-react";
+import { ArrowLeft, X, Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const challengeImages = [
-  { src: "/challenge1.jpeg", number: "Challenge 1", name: "Fragmented data limits whole-of-system decisions" },
-  { src: "/challenge2.jpeg", number: "Challenge 2", name: "Youth participation drops sharply during the teenage years" },
-  { src: "/challenge3.jpeg", number: "Challenge 3", name: "Volunteer-run clubs are stretched by invisible operational work" },
-  { src: "/challenge4.jpeg", number: "Challenge 4", name: "Quality coaching is uneven outside major centres" },
-  { src: "/challenge5.jpeg", number: "Challenge 5", name: "Integrity and safeguarding are still too reactive" },
-  { src: "/challenge6.jpeg", number: "Challenge 6", name: "Para-sport pathways still face access and fairness barriers" },
-  { src: "/challenge7.jpeg", number: "Challenge 7", name: "Sport diplomacy creates strategic value, but the impact is hard to prove" },
-  { src: "/challenge8.jpeg", number: "Challenge 8", name: "Lower-tier sport struggles to convert visibility into sustainable economics" },
+const challengeCategories = [
+  {
+    category: "Understand Risk",
+    cards: [
+      { src: "/Challenge 1.png", number: "Challenge Card 1", name: "Turning fragmented border signals into a single operational risk picture" },
+      { src: "/Challenge 2.png", number: "Challenge Card 2", name: "Reducing false positives without increasing misses" },
+      { src: "/Challenge 3.png", number: "Challenge Card 3", name: "Making scan images actionable at scale" },
+      { src: "/Challenge 4.png", number: "Challenge Card 4", name: "Converting 'rules and circulars' into decision-ready knowledge" },
+    ],
+  },
+  {
+    category: "Investigate & Act",
+    cards: [
+      { src: "/Challenge 5.png", number: "Challenge Card 5", name: "Detecting trade-based fraud patterns beyond single shipments" },
+      { src: "/Challenge 6.png", number: "Challenge Card 6", name: "Building legally defensible, explainable targeting recommendations" },
+      { src: "/Challenge 7.png", number: "Challenge Card 7", name: "Moving from 'alerts' to investigation-ready evidence packs" },
+      { src: "/Challenge 8.png", number: "Challenge Card 8", name: "Rapidly updating risk parameters as modus operandi evolves" },
+      { src: "/Challenge 9.png", number: "Challenge Card 9", name: "Making passenger targeting effective without harming legitimate travel" },
+    ],
+  },
+  {
+    category: "Productivity & Ops. Flow",
+    cards: [
+      { src: "/Challenge 10.png", number: "Challenge Card 1", name: "Prioritising inspections across ports and modalities under limited capacity" },
+      { src: "/Challenge 11.png", number: "Challenge Card 2", name: "Achieving interoperable data foundations without a 'rip and replace'" },
+      { src: "/Challenge 12.png", number: "Challenge Card 3", name: "Scaling AI safely in a state enforcement environment" },
+      { src: "/Challenge 13.png", number: "Challenge Card 4", name: "Improving targeting outcomes through structured feedback loops" },
+    ],
+  },
 ];
 
 const ChallengeCards = () => {
   const navigate = useNavigate();
   const [selectedImg, setSelectedImg] = useState<string | null>(null);
+  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+
+  const handleCopy = useCallback(async (e: React.MouseEvent, name: string, index: number) => {
+    e.stopPropagation();
+    await navigator.clipboard.writeText(name);
+    setCopiedIndex(index);
+    setTimeout(() => setCopiedIndex(null), 2000);
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -40,22 +68,52 @@ const ChallengeCards = () => {
         </div>
       </header>
 
-      {/* Cards grid – clickable titles only */}
-      <div className="flex-1 min-h-0 flex items-center justify-center p-4">
-        <div className="w-full max-w-[1600px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {challengeImages.map((challenge, index) => (
-            <button
-              key={index}
-              onClick={() => setSelectedImg(challenge.src)}
-              className="rounded-xl border border-border bg-card p-6 text-left transition-all hover:shadow-lg hover:border-primary/30 hover:-translate-y-1"
-            >
-              <p className="text-sm font-bold text-primary uppercase tracking-wide">
-                {challenge.number}
-              </p>
-              <p className="text-base font-semibold text-card-foreground font-display leading-snug mt-1.5">
-                {challenge.name}
-              </p>
-            </button>
+      {/* Categorised cards */}
+      <div className="flex-1 min-h-0 overflow-y-auto p-4 flex items-center justify-center">
+        <div className="w-full max-w-[1600px] space-y-8">
+          {challengeCategories.map((group) => (
+            <div key={group.category}>
+              <h2 className="text-lg font-bold text-foreground mb-3 px-1">
+                {group.category}
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {group.cards.map((challenge, index) => {
+                  const globalIndex = challengeCategories
+                    .slice(0, challengeCategories.indexOf(group))
+                    .reduce((sum, g) => sum + g.cards.length, 0) + index;
+                  return (
+                    <div
+                      key={globalIndex}
+                      className="rounded-xl border border-border bg-card text-left transition-all hover:shadow-lg hover:border-primary/30 hover:-translate-y-1 relative p-5 cursor-pointer"
+                      onClick={() => setSelectedImg(challenge.src)}
+                    >
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className={`absolute top-3 right-3 h-7 text-xs ${copiedIndex === globalIndex ? "text-green-600 border-green-300" : ""}`}
+                        onClick={(e) => handleCopy(e, challenge.name, globalIndex)}
+                      >
+                        {copiedIndex === globalIndex ? (
+                          <>
+                            <Check className="h-3 w-3 mr-1" /> Copied
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="h-3 w-3 mr-1" /> Copy
+                          </>
+                        )}
+                      </Button>
+                      <p className="text-xs font-bold text-foreground uppercase tracking-wide pr-16">
+                        {challenge.number}
+                      </p>
+                      <p className="text-sm font-semibold text-primary font-display leading-snug mt-1.5">
+                        {challenge.name}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           ))}
         </div>
       </div>
